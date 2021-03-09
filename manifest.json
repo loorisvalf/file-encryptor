@@ -1,0 +1,35 @@
+{
+  "version": "0.1.5",
+  "manifest_version": 2,
+  "offline_enabled": true,
+  "short_name": "file-encryptor",
+  "permissions": ["storage", "contextMenus"],
+  "name": "File Guard (Encryptor | Decryptor)",
+  "homepage_url": "https://mybrowseraddon.com/file-encryptor.html",
+  "description": "Encrypt or decrypt any file with just one click inside your browser!",
+  "background": {
+    "persistent": false,
+    "scripts": [
+      "lib/config.js", 
+      "lib/chrome.js",
+      "lib/runtime.js",
+      "lib/common.js"
+    ]
+  },
+  "browser_action": {
+    "default_title": "File Guard (Encryptor | Decryptor)",
+    "default_icon": {
+      "16": "data/icons/16.png",
+      "32": "data/icons/32.png",
+      "48": "data/icons/48.png",
+      "64": "data/icons/64.png"
+    }
+  },
+  "icons": {
+    "16": "data/icons/16.png",
+    "32": "data/icons/32.png",
+    "48": "data/icons/48.png",
+    "64": "data/icons/64.png",
+    "128": "data/icons/128.png"
+  }
+}
