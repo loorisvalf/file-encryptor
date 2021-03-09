@@ -16,4 +16,4 @@ Webapp & PWA: https://webbrowsertools.com/file-encryptor/
 
 ---------------------------  
 
-Support & FAQ: https://mybrowseraddon.com/text-to-speech.html  
+Support & FAQ: https://mybrowseraddon.com/file-encryptor.html  
