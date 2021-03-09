@@ -270,6 +270,7 @@ input, div, table, table tr td {
   }
 }
 
+html[context="webapp"] .title,
 html[context="webapp"] .toolbar {
   display: none;
 }
