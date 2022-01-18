@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 	<head>
 		<title>File Guard (Encryptor | Decryptor)</title>
 		<link type="text/css" rel="stylesheet" href="index.css">
 		<link type="text/css" rel="stylesheet" href="resources/loader.css">
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 	</head>
 	<body>
 		<div class="toolbar">
@@ -37,16 +37,16 @@
 						<td class="name">
 							<div>Encrypt</div>
 						</td>
-						<td class="password">
+						<td class="password encrypt-box">
 							<input type="file" id="encrypt-input">
 							<input type="password" id="encrypt-password-1" placeholder="enter a password">
 							<input type="password" id="encrypt-password-2" placeholder="re-enter your password">
 						</td>
 						<td class="button" title="Encrypt">
 							<button class="encrypt" id="encrypt-button">
-								<svg width="14" height="14" viewBox="0 0 20 20">
-									<path d="M4 8V6a6 6 0 1 1 12 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z"/>
-								</svg>
+                <svg width="18" height="18" viewBox="0 0 1792 1792">
+                  <path d="M 910.13383,184.016 C 786.80185,184.016 681.49043,227.8181 593.82472,315.48475 506.15898,403.15143 462.13862,508.68266 462.13862,632.016 V 824.07851 H 428.67022 C 402.00384,824.07851 379.30617,833.41184 360.63971,852.07851 341.97323,870.74518 332.64,893.44308 332.64,920.10976 V 1496.0785 C 332.64,1522.7452 341.97323,1545.4431 360.63971,1564.1098 379.30617,1582.7765 402.00384,1592.1098 428.67022,1592.1098 H 1388.7537 C 1415.4202,1592.1098 1438.1178,1582.7765 1456.7843,1564.1098 1475.4508,1545.4431 1484.784,1522.7452 1484.784,1496.0785 V 920.10976 C 1484.784,893.44308 1475.4508,870.74518 1456.7843,852.07851 1438.1178,833.41184 1415.4202,824.07851 1388.7537,824.07851 H 1358.129 V 632.016 C 1358.129,508.68266 1314.3274,403.15143 1226.6617,315.48475 1138.996,227.8181 1033.4659,184.016 910.13383,184.016 Z M 910.13383,376.07851 C 980.79978,376.07851 1041.2574,401.10974 1091.2569,451.10976 1141.2563,501.10974 1166.2874,561.34933 1166.2874,632.016 V 824.07851 H 1100.6631 654.19906 V 632.016 C 654.19906,561.34933 679.23006,501.10974 729.22952,451.10976 779.22898,401.10974 839.46799,376.07851 910.13383,376.07851 Z" />
+                 </svg>
 							</button>
 						</td>
 					</tr>
@@ -63,16 +63,16 @@
 						<td class="name">
 							<div>Decrypt</div>
 						</td>
-						<td class="password">
+						<td class="password decrypt-box">
 							<input type="file" id="decrypt-input">
 							<input type="password" id="decrypt-password-1" placeholder="enter a password">
 							<input type="password" id="decrypt-password-2" placeholder="re-enter your password">
 						</td>
 						<td class="button" title="Decrypt">
 							<button class="decrypt" id="decrypt-button">
-								<svg width="14" height="14" viewBox="0 0 20 20">
-									<path d="M4 8V6a6 6 0 1 1 12 0h-3v2h4a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z"/>
-								</svg>
+                <svg width="18" height="18" viewBox="0 0 1792 1792">
+                  <path d="M 1728,632.016 V 888.016 Q 1728,914.016 1709,933.016 1690,952.016 1664,952.016 H 1600 Q 1574,952.016 1555,933.016 1536,914.016 1536,888.016 V 632.016 Q 1536,526.016 1461,451.016 1386,376.016 1280,376.016 1174,376.016 1099,451.016 1024,526.016 1024,632.016 V 824.016 H 1120 Q 1160,824.016 1188,852.016 1216,880.016 1216,920.016 V 1496.016 Q 1216,1536.016 1188,1564.016 1160,1592.016 1120,1592.016 H 160 Q 120,1592.016 92,1564.016 64,1536.016 64,1496.016 V 920.016 Q 64,880.016 92,852.016 120,824.016 160,824.016 H 832 V 632.016 Q 832,447.016 963.5,315.516 1095,184.016 1280,184.016 1465,184.016 1596.5,315.516 1728,447.016 1728,632.016 Z"/>
+                 </svg>                 
 							</button>
 						</td>
 					</tr>
@@ -86,6 +86,7 @@
 				<div class="result"></div>
 			</div>
 		</div>
+    <!-- -->
     <script type="text/javascript" src="index.js"></script>
 	</body>
 </html>
