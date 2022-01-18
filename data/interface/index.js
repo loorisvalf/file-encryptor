@@ -135,8 +135,8 @@ var config = {
             if (document.location.search === "?popup") config.port.name = "popup";
             /*  */
             if (config.port.name === "popup") {
-              document.documentElement.style.width = "600px";
-              document.documentElement.style.height = "500px";
+              document.documentElement.style.width = "750px";
+              document.documentElement.style.height = "600px";
             }
             /*  */
             chrome.runtime.connect({"name": config.port.name});
