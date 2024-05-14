@@ -9,10 +9,11 @@ var config = {
       return chrome.runtime.getManifest().homepage_url;
     }
   },
-  "key": function (p) {
-    var usages = ["encrypt", "decrypt"];
-    var buffer = config.file.convert.to.arraybuffer.string(p);
-    var algo = {"digest": {"name": "SHA-256"}, "import": {"name": "AES-CBC"}};
+  "key": async function (p) {
+    const usages = ["encrypt", "decrypt"];
+    const buffer = config.file.convert.to.arraybuffer.string(p);
+    const algo = {"digest": {"name": "SHA-256"}, "import": {"name": "AES-CBC"}};
+    /*  */
     return crypto.subtle.digest(algo.digest, buffer).then(data => crypto.subtle.importKey("raw", data, algo.import, false, usages));
   },
   "error": function (e) {
@@ -20,7 +21,7 @@ var config = {
     config.loader.hide();
     /*  */
     document.querySelector(".info").removeAttribute("state");
-    document.querySelector(".result").removeAttribute("state");
+    document.querySelector(".result-file").removeAttribute("state");
   },
   "encrypt": async function (ivector, key) {
     try {
@@ -38,9 +39,19 @@ var config = {
       }, key, config.file.convert.to.arraybuffer.decrypt);
     } catch (e) {}
   },
+  "listener": {
+    "dragover": function (e) {
+      e.preventDefault();
+    },
+    "drop": function (e) {
+      if (!e.target.id || e.target.id.indexOf("-input") === -1) {
+        e.preventDefault();
+      }
+    }
+  },
   "password": function (name) {
-    var password_1 = document.getElementById(name + "-password-1").value;
-    var password_2 = document.getElementById(name + "-password-2").value;
+    const password_1 = document.getElementById(name + "-password-1").value;
+    const password_2 = document.getElementById(name + "-password-2").value;
     /*  */
     if (!password_1) window.alert("Please enter a password in the 1st field (min 7 characters).");
     else if (!password_2) window.alert("Please enter a password in the 2nd field (min 7 characters).");
@@ -60,8 +71,8 @@ var config = {
           "encrypt": null,
           "decrypt": null,
           "string": function (s) {
-            var bytes = new Uint8Array(s.length);
-            for (var i = 0; i < s.length; i++) bytes[i] = s.charCodeAt(i);
+            const bytes = new Uint8Array(s.length);
+            for (let i = 0; i < s.length; i++) bytes[i] = s.charCodeAt(i);
             return bytes;
           }
         }
@@ -70,12 +81,12 @@ var config = {
   },
   "loader": {
     "hide": function () {
-      var loader = document.querySelector(".loader");
+      const loader = document.querySelector(".loader");
       if (loader) loader.remove();
     },
     "show": function () {
-      var loader = document.createElement("div");
-      var result = document.querySelector(".result");
+      const loader = document.createElement("div");
+      const result = document.querySelector(".result-file");
       /*  */
       loader.setAttribute("class", "loader");
       loader.appendChild(document.createElement("div"));
@@ -86,21 +97,21 @@ var config = {
     }
   },
   "download": function (href, filename) {
-    var a = document.createElement('a');
-    var result = document.querySelector(".result");
+    const a = document.createElement('a');
+    const icon = document.querySelector(".result-icon");
+    const result = document.querySelector(".result-file");
     result.textContent = '';
     /*  */
     a.href = href;
     a.download = filename;
-    a.textContent = filename;
     result.appendChild(a);
+    a.textContent = filename;
+    icon.setAttribute("download", '');
     result.setAttribute("state", filename.indexOf("encrypted") !== -1 ? "encrypted" : "decrypted");
     a.click();
     /*  */
     window.setTimeout(function () {
       config.loader.hide();
-      URL.revokeObjectURL(href);
-      delete config.blob;
     }, 300);
   },
   "resize": {
@@ -109,7 +120,7 @@ var config = {
       if (config.port.name === "win") {
         if (config.resize.timeout) window.clearTimeout(config.resize.timeout);
         config.resize.timeout = window.setTimeout(async function () {
-          var current = await chrome.windows.getCurrent();
+          const current = await chrome.windows.getCurrent();
           /*  */
           config.storage.write("interface.size", {
             "top": current.top,
@@ -125,7 +136,7 @@ var config = {
     "name": '',
     "connect": function () {
       config.port.name = "webapp";
-      var context = document.documentElement.getAttribute("context");
+      const context = document.documentElement.getAttribute("context");
       /*  */
       if (chrome.runtime) {
         if (chrome.runtime.connect) {
@@ -137,6 +148,7 @@ var config = {
             if (config.port.name === "popup") {
               document.documentElement.style.width = "750px";
               document.documentElement.style.height = "600px";
+              document.querySelector(".separator").style.height = "38px";
             }
             /*  */
             chrome.runtime.connect({"name": config.port.name});
@@ -161,7 +173,7 @@ var config = {
     "write": function (id, data) {
       if (id) {
         if (data !== '' && data !== null && data !== undefined) {
-          var tmp = {};
+          let tmp = {};
           tmp[id] = data;
           config.storage.local[id] = data;
           chrome.storage.local.set(tmp, function () {});
@@ -173,22 +185,31 @@ var config = {
     }
   },
   "load": function () {
-    var reload = document.getElementById("reload");
-    var support = document.getElementById("support");
-    var donation = document.getElementById("donation");
+    const reload = document.getElementById("reload");
+    const support = document.getElementById("support");
+    const icon = document.querySelector(".result-icon");
+    const donation = document.getElementById("donation");
     /*  */
     reload.addEventListener("click", function () {
       document.location.reload();
     }, false);
     /*  */
     support.addEventListener("click", function () {
-      var url = config.addon.homepage();
+      const url = config.addon.homepage();
       chrome.tabs.create({"url": url, "active": true});
     }, false);
     /*  */
     donation.addEventListener("click", function () {
-      var url = config.addon.homepage() + "?reason=support";
+      const url = config.addon.homepage() + "?reason=support";
       chrome.tabs.create({"url": url, "active": true});
+    }, false);
+    /*  */
+    icon.addEventListener("click", function () {
+      const file = document.querySelector(".result-file");
+      const anchor = file.querySelector('a');
+      if (anchor) {
+        anchor.click();
+      }
     }, false);
     /*  */
     config.storage.load(config.app.start);
@@ -198,7 +219,9 @@ var config = {
     "start": function () {
       config.loader.hide();
       /*  */
-      var encrypt = {}, decrypt = {};
+      const encrypt = {};
+      const decrypt = {};
+      /*  */
       encrypt.input = document.getElementById("encrypt-input");
       decrypt.input = document.getElementById("decrypt-input");
       decrypt.button = document.getElementById("decrypt-button");
@@ -207,12 +230,15 @@ var config = {
       encrypt.input.addEventListener("change", function (e) {
         if (e.target.files.length !== 1) return window.alert("Please select a file to encrypt!");
         /*  */
-        var filereader = new FileReader();
-        var info = document.querySelector(".info");
-        var result = document.querySelector(".result");
+        const filereader = new FileReader();
+        const info = document.querySelector(".info");
+        const icon = document.querySelector(".result-icon");
+        const result = document.querySelector(".result-file");
         /*  */
         result.textContent = '';
         result.removeAttribute("state");
+        icon.removeAttribute("download");
+        URL.revokeObjectURL(config.blob);
         config.file.encrypt = e.target.files[0];
         info.textContent = config.file.encrypt.name;
         filereader.readAsArrayBuffer(config.file.encrypt);
@@ -223,12 +249,15 @@ var config = {
       decrypt.input.addEventListener("change", function (e) {
         if (e.target.files.length !== 1) return window.alert("Please select a file to decrypt!");
         /*  */
-        var filereader = new FileReader();
-        var info = document.querySelector(".info");
-        var result = document.querySelector(".result");
+        const filereader = new FileReader();
+        const info = document.querySelector(".info");
+        const icon = document.querySelector(".result-icon");
+        const result = document.querySelector(".result-file");
         /*  */
         result.textContent = '';
         result.removeAttribute("state");
+        icon.removeAttribute("download");
+        URL.revokeObjectURL(config.blob);
         config.file.decrypt = e.target.files[0];
         info.textContent = config.file.decrypt.name;
         filereader.readAsArrayBuffer(config.file.decrypt);
@@ -241,8 +270,8 @@ var config = {
           return window.alert("Please select a file to encrypt!");
         }
         /*  */
-        var password = config.password("encrypt");
-        var ivector = crypto.getRandomValues(new Uint8Array(16));
+        const password = config.password("encrypt");
+        const ivector = crypto.getRandomValues(new Uint8Array(16));
         /*  */
         if (password) {
           config.loader.show();
@@ -254,8 +283,8 @@ var config = {
                   if (result) {
                     config.blob = new Blob([ivector, result], {"type": "application/octet-binary"});
                     if (config.blob) {
-                      var href = URL.createObjectURL(config.blob);
-                      var filename = config.file.encrypt.name + ".encrypted";
+                      const href = URL.createObjectURL(config.blob);
+                      const filename = config.file.encrypt.name + ".encrypted";
                       /*  */
                       config.download(href, filename);
                     } else {
@@ -278,8 +307,8 @@ var config = {
           return window.alert("Please select a file to decrypt!");
         }
         /*  */
-        var password = config.password("decrypt");
-        var ivector = crypto.getRandomValues(new Uint8Array(16));
+        const password = config.password("decrypt");
+        const ivector = crypto.getRandomValues(new Uint8Array(16));
         /*  */
         if (password) {
           config.loader.show();
@@ -291,8 +320,8 @@ var config = {
                   if (result) {
                     config.blob = new Blob([result], {"type": "application/octet-binary"});
                     if (config.blob) {
-                      var href = URL.createObjectURL(config.blob);
-                      var filename = config.file.decrypt.name.replace(".encrypted", '');
+                      const href = URL.createObjectURL(config.blob);
+                      const filename = config.file.decrypt.name.replace(".encrypted", '');
                       /*  */
                       config.download(href, filename);
                     } else {
@@ -315,15 +344,7 @@ var config = {
 
 config.port.connect();
 
-window.addEventListener("dragover", function (e) {
-  e.preventDefault();
-});
-
-window.addEventListener("drop", function (e) {
-  if (!e.target.id || e.target.id.indexOf("-input") === -1) {
-    e.preventDefault();
-  }
-});
-
 window.addEventListener("load", config.load, false);
+window.addEventListener("drop", config.listener.drop);
+window.addEventListener("dragover", config.listener.dragover);
 window.addEventListener("resize", config.resize.method, false);

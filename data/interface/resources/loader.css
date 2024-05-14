@@ -4,8 +4,8 @@
   left: -32px;
   height: 28px;
   text-align: center;
-  display: inline-block;
   position: relative;
+  display: inline-block;
 }
 
 .loader[state="show"] {visibility: show}
@@ -13,46 +13,46 @@
 
 .loader div {
   top: 0;
-  width: 5px;
-  height: 5px;
+  width: 10px;
+  height: 10px;
+  background: #555;
   margin-top: 10px;
   border-radius: 50%;
   position: relative;
-  background: #747474;
   display: inline-block;
   animation-timing-function: cubic-bezier(0, 1, 1, 0);
 }
 
 .loader div:nth-child(1) {
   left: 5px;
-  animation: loader1 0.6s infinite;
+  animation: loader_1 600ms infinite;
 }
 
 .loader div:nth-child(2) {
   left: 5px;
-  animation: loader2 0.6s infinite;
+  animation: loader_2 600ms infinite;
 }
 
 .loader div:nth-child(3) {
   left: 32px;
-  animation: loader2 0.6s infinite;
+  animation: loader_3 600ms infinite;
 }
 
 .loader div:nth-child(4) {
   left: 55px;
-  animation: loader3 0.6s infinite;
+  animation: loader_4 600ms infinite;
 }
 
-@keyframes loader1 {
+@keyframes loader_1 {
   0% {
-    transform: scale(0);
+    transform: scale(0.0);
   }
   100% {
-    transform: scale(1);
+    transform: scale(1.0);
   }
 }
 
-@keyframes loader2 {
+@keyframes loader_2 {
   0% {
     transform: translate(0, 0);
   }
@@ -61,11 +61,20 @@
   }
 }
 
-@keyframes loader3 {
+@keyframes loader_3 {
   0% {
-    transform: scale(1);
+    transform: translate(0, 0);
   }
   100% {
-    transform: scale(0);
+    transform: translate(32px, 0);
+  }
+}
+
+@keyframes loader_4 {
+  0% {
+    transform: scale(1.0);
+  }
+  100% {
+    transform: scale(0.0);
   }
 }
