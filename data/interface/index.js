@@ -185,6 +185,7 @@ var config = {
     }
   },
   "load": function () {
+    const theme = document.getElementById("theme");
     const reload = document.getElementById("reload");
     const support = document.getElementById("support");
     const icon = document.querySelector(".result-icon");
@@ -204,6 +205,14 @@ var config = {
       chrome.tabs.create({"url": url, "active": true});
     }, false);
     /*  */
+    theme.addEventListener("click", function () {
+      let attribute = document.documentElement.getAttribute("theme");
+      attribute = attribute === "dark" ? "light" : "dark";
+      /*  */
+      document.documentElement.setAttribute("theme", attribute);
+      config.storage.write("theme", attribute);
+    }, false);
+    /*  */
     icon.addEventListener("click", function () {
       const file = document.querySelector(".result-file");
       const anchor = file.querySelector('a');
@@ -221,11 +230,13 @@ var config = {
       /*  */
       const encrypt = {};
       const decrypt = {};
+      const theme = config.storage.read("theme") !== undefined ? config.storage.read("theme") : "light";
       /*  */
       encrypt.input = document.getElementById("encrypt-input");
       decrypt.input = document.getElementById("decrypt-input");
       decrypt.button = document.getElementById("decrypt-button");
       encrypt.button = document.getElementById("encrypt-button");
+      document.documentElement.setAttribute("theme", theme !== undefined ? theme : "light");
       /*  */
       encrypt.input.addEventListener("change", function (e) {
         if (e.target.files.length !== 1) return window.alert("Please select a file to encrypt!");
@@ -271,10 +282,13 @@ var config = {
         }
         /*  */
         const password = config.password("encrypt");
+        const text = document.querySelector(".result-file a");
         const ivector = crypto.getRandomValues(new Uint8Array(16));
         /*  */
         if (password) {
           config.loader.show();
+          if (text) text.remove();
+          /*  */
           window.setTimeout(function () {
             config.key(password).then(key => {
               config.encrypt(ivector, key).then(function (result) {
@@ -308,10 +322,13 @@ var config = {
         }
         /*  */
         const password = config.password("decrypt");
+        const text = document.querySelector(".result-file a");
         const ivector = crypto.getRandomValues(new Uint8Array(16));
         /*  */
         if (password) {
           config.loader.show();
+          if (text) text.remove();
+          /*  */
           config.key(password).then(key => {
             window.setTimeout(function () {
               config.decrypt(ivector, key).then(function (result) {
@@ -345,6 +362,6 @@ var config = {
 config.port.connect();
 
 window.addEventListener("load", config.load, false);
-window.addEventListener("drop", config.listener.drop);
-window.addEventListener("dragover", config.listener.dragover);
+window.addEventListener("drop", config.listener.drop, false);
 window.addEventListener("resize", config.resize.method, false);
+window.addEventListener("dragover", config.listener.dragover, false);
