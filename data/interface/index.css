@@ -74,7 +74,7 @@ input, div, table, table tr td {
   box-sizing: border-box;
   vertical-align: middle;
   box-sizing: border-box;
-	border: solid 1px rgba(0,0,0,0.05);
+	border: solid 1px rgba(0, 0, 0, 0.05);
 }
 
 .content .encrypt-box input[type="password"] {
@@ -190,7 +190,7 @@ input, div, table, table tr td {
   width: 50%;
   content: '';
   margin: 0 10px;
-  border-bottom: solid 1px rgba(0,0,0,0.05);
+  border-bottom: solid 1px rgba(0, 0, 0, 0.05);
 }
 
 .content .separator div svg {
@@ -221,7 +221,7 @@ input, div, table, table tr td {
   user-select: none;
   line-height: 22px;
   text-align: justify;
-  width: calc(100% - 20px);
+  width: calc(100% - 30px);
 }
 
 .footer .info, .footer .result {
@@ -322,7 +322,7 @@ input, div, table, table tr td {
   height: 48px;
   display: flex;
   justify-content: flex-end;
-  border-bottom: solid 1px rgba(0,0,0,0.05);
+  border-bottom: solid 1px rgba(0, 0, 0, 0.05);
 }
 
 .toolbar table {
@@ -348,12 +348,15 @@ input, div, table, table tr td {
 }
 
 .toolbar table tr td:hover {
-  background-color: rgba(0,0,0,0.05);
+  background-color: rgba(0, 0, 0, 0.05);
 }
 
 @media (max-width: 400px) {
   .toolbar, .container .title {
     display: none;
+  }
+  .footer .note p {
+    width: calc(100% - 20px);
   }
   .container {
     width: 100%;
@@ -375,6 +378,18 @@ html[context="webapp"] .toolbar {
 
 html[theme='dark'] .loader div {
   background: rgb(255 255 255 / 75%);
+}
+
+html[theme='dark'] .content .encrypt-box input[type="password"] {
+  background-color: rgb(70 115 183 / 7%);
+}
+
+html[theme='dark'] .content .decrypt-box input[type="password"] {
+  background-color: rgb(121 185 22 / 7%);
+}
+
+html[theme='dark'] .toolbar table tr td:hover {
+  background-color: rgb(255 255 255 / 5%);
 }
 
 html[theme='dark'], 
